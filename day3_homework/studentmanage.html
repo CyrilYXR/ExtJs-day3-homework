@@ -1,0 +1,128 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>studentmanage</title>
+
+    <script type="text/javascript" src="../ext/ext-base.js"></script>
+    <script type="text/javascript" src="../ext/ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="../ext/ext-all.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            var selectedNode;
+            var itatree = new Ext.tree.TreePanel({
+                id: 'itatree',
+                lines: true,
+                width: 200,
+                // height: 250,
+                enableDD: true,
+                listeners: {
+                    click: function (node) {
+                        selectedNode = node
+                    },
+                    contextmenu: function (node, e) {
+                        node.select();
+                        var c = node.getOwnerTree().contextMenu;
+                        c.contextNode = node;
+                        c.showAt(e.getXY());
+                        selectedNode = node
+                    }
+                },
+                loader: new Ext.tree.TreeLoader({
+                    dataUrl: 'initdata.txt'
+                }),
+                root: new Ext.tree.AsyncTreeNode({
+                    text: 'ITA',
+                    expanded: true
+                }),
+                contextMenu: new Ext.menu.Menu({
+                    items: [{
+                        id: 'addStudent',
+                        text: 'add student'
+                    }, {
+                        id: 'addClass',
+                        text: 'add class'
+                    },{
+                        id: 'delete',
+                        text: 'delete'
+                    }],
+                    listeners: {
+                        itemclick: function (item) {
+                            // var node = item.parentMenu.contextNode;
+                            switch (item.id) {
+                                case 'addStudent':
+                                    var newStudent = new Ext.tree.TreeNode({
+                                        text: 'New Student',
+                                        icon: 'people.png',
+                                        leaf: true
+                                    })
+                                    selectedNode.appendChild(newStudent);
+                                    treeEditor.editNode = newStudent;
+                                    treeEditor.startEdit(newStudent.ui.textNode, '');
+                                    break;
+
+                                case 'addClass':
+                                    let newClass = new Ext.tree.TreeNode({
+                                        text: 'New Class',
+                                        icon: 'class.png'
+                                    })
+                                    selectedNode.parentNode.appendChild(newClass);
+                                    treeEditor.editNode = newClass;
+                                    treeEditor.startEdit(newClass.ui.textNode, '');
+                                    break;
+                                case 'delete':
+                                    if(selectedNode.parentNode){
+                                        selectedNode.remove();
+                                    }
+                                    break;
+                            }
+                        }
+                    },
+                }),
+                selModel: new Ext.tree.MultiSelectionModel({}),
+            })
+            itatree.expandAll();
+            var viewport = new Ext.Viewport({
+                items: [itatree]
+            })
+
+            var treeEditor = new Ext.tree.TreeEditor(itatree, {
+                allowBlank: false
+            }, {})
+
+            Ext.get('addButton').on('click', function () {
+                if (selectedNode === undefined) {
+                    Ext.Msg.alert('error', '请点击要添加的班级或学生');
+                    return;
+                }
+                let value = Ext.get('inputName').getValue();
+                if (selectedNode.isLeaf()) {
+                    let newTreeNode = new Ext.tree.TreeNode({
+                        text: value,
+                        icon: 'people.png'
+                    })
+                    selectedNode.parentNode.appendChild(newTreeNode);
+                } else {
+                    let newTreeNode = new Ext.tree.TreeNode({
+                        text: value,
+                        icon: 'class.png',
+                        children: []
+                    })
+                    selectedNode.parentNode.appendChild(newTreeNode);
+                    
+                }
+
+            });
+
+        })
+    </script>
+</head>
+
+<body>
+    <input type="text" id="inputName">
+    <button id="addButton">add</button>
+</body>
+
+</html>

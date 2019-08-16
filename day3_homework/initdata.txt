@@ -1,0 +1,14 @@
+[
+    {text:'Bering',icon:'class.png',children:[
+        {text:'xiaoming',icon:'people.png',leaf:true},
+        {text:'xiaohong',icon:'people.png',leaf:true},
+        {text:'xiaolang',icon:'people.png',leaf:true}
+    ]},
+    {text:'Gribraltar',icon:'class.png',children:[
+        {text:'Cyril',icon:'people.png',leaf:true},
+        {text:'Tomi',icon:'people.png',leaf:true},
+        {text:'Panda',icon:'people.png',leaf:true}
+    ]},
+    {text:'Panama',icon:'class.png',children:[]},
+    {text:'Suez',icon:'class.png',children:[]}
+]
