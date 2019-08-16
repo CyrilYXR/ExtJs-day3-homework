@@ -44,7 +44,7 @@
                     }, {
                         id: 'addClass',
                         text: 'add class'
-                    },{
+                    }, {
                         id: 'delete',
                         text: 'delete'
                     }],
@@ -53,6 +53,10 @@
                             // var node = item.parentMenu.contextNode;
                             switch (item.id) {
                                 case 'addStudent':
+                                    if (selectedNode.isLeaf()) {
+                                        Ext.Msg.alert('error', '无法添加学生，请在班级上添加');
+                                        return;
+                                    }
                                     var newStudent = new Ext.tree.TreeNode({
                                         text: 'New Student',
                                         icon: 'people.png',
@@ -64,6 +68,10 @@
                                     break;
 
                                 case 'addClass':
+                                    if (selectedNode.isLeaf()) {
+                                        Ext.Msg.alert('error', '无法添加班级，请在班级上添加');
+                                        return;
+                                    }
                                     let newClass = new Ext.tree.TreeNode({
                                         text: 'New Class',
                                         icon: 'class.png'
@@ -73,7 +81,7 @@
                                     treeEditor.startEdit(newClass.ui.textNode, '');
                                     break;
                                 case 'delete':
-                                    if(selectedNode.parentNode){
+                                    if (selectedNode.parentNode) {
                                         selectedNode.remove();
                                     }
                                     break;
@@ -111,7 +119,7 @@
                         children: []
                     })
                     selectedNode.parentNode.appendChild(newTreeNode);
-                    
+
                 }
 
             });
